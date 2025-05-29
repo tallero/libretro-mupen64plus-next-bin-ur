@@ -117,46 +117,75 @@ _lib_gles3="mupen64plus_next_gles3_libretro_android.so"
 # onto mainnets download after download on the mainnets when crowd-publishing
 # will be ready.
 _evmfs_network="17000"
+_evmfs_sig_network="100"
 _evmfs_address="0x151920938488F193735e83e052368cD41F9d9362"
+_evmfs_sig_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
+# The kid
 _evmfs_ns="0x926acb6aA4790ff678848A9F1C59E578B148C786"
+# Dvorak
+_evmfs_sig_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
 _lib_gles2_sum="4ee8f24e075cbfa87cd7b76519bb3522c55633f51291933701b2ec5758944344"
 _lib_gles3_sum="fc0cb49c5c0e07622a6f061c095dc3c4c95596904312796568c4a8def11fc1c6"
+_lib_gles3_sig_sum="aa6c5dbdb0c1b6ee89903347f8c44a8cf87a64a522ed2c7bf5f901a17fe683ef"
+_lib_gles2_sig_sum="e2a7588e296a6477e37e7e07b0641cb38301e400d028d661a31d265f5cc4040c"
 _http="https://github.com"
 _ns="6xrS42VaMBgMbWRPAiVP"
 _url="${_http}/${_ns}/${pkgname}"
 _commit="171f10df1c118cac425e136727c6464c1b20046f"
 _evmfs_lib_gles2_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_lib_gles2_sum}"
+_evmfs_lib_gles2_sig_uri="evmfs://${_evmfs_sig_network}/${_evmfs_sig_address}/${_evmfs_sig_ns}/${_lib_gles2_sig_sum}"
 _evmfs_lib_gles3_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_lib_gles3_sum}"
-_evmfs_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_lib_sum}"
+_evmfs_lib_gles3_sig_uri="evmfs://${_evmfs_sig_network}/${_evmfs_sig_address}/${_evmfs_sig_ns}/${_lib_gles3_sig_sum}"
 source=()
 sha256sums=()
 if [[ "${_evmfs}" == "true" ]]; then
   _lib_gles2_src="${_lib_gles2}.tar.xz::${_evmfs_lib_gles2_uri}"
+  _lib_gles2_sig_src="${_lib_gles2}.tar.xz.sig::${_evmfs_lib_gles2_sig_uri}"
   _lib_gles3_src="${_lib_gles3}.tar.xz::${_evmfs_lib_gles3_uri}"
+  _lib_gles3_sig_src="${_lib_gles3}.tar.xz.sig::${_evmfs_lib_gles3_sig_uri}"
   if [[ "${_gles3}" == "true" ]]; then
     source+=(
       "${_lib_gles3_src}"
+      "${_lib_gles3_sig_src}"
     )
     sha256sums+=(
       "${_lib_gles3_sum}"
+      "${_lib_gles3_sig_sum}"
     )
   fi
 elif [[ "${_evmfs}" == "false" ]]; then
-  _lib_gles2_src="${_lib}.tar.xz::${_url}/raw/${_commit}/${_lib}.arm.tar.xz"
+  _lib_gles2_src="${_lib_gles2}.tar.xz::${_url}/raw/${_commit}/${_lib_gles2}.arm.tar.xz"
+  _lib_gles2_sig_src="${_lib_gles2}.tar.xz.sig::${_url}/raw/${_commit}/${_lib_gles2}.arm.tar.xz.sig"
+  _lib_gles3_src="${_lib_gles3}.tar.xz::${_url}/raw/${_commit}/${_lib_gles3}.arm.tar.xz"
+  _lib_gles3_sig_src="${_lib_gles3}.tar.xz.sig::${_url}/raw/${_commit}/${_lib_gles3}.arm.tar.xz.sig"
+fi
+if [[ "${_gles3}" == "true" ]]; then
+  source+=(
+    "${_lib_gles3_src}"
+    "${_lib_gles3_sig_src}"
+  )
+  sha256sums+=(
+    "${_lib_gles3_sum}"
+    "${_lib_gles3_sig_sum}"
+  )
 fi
 source+=(
-  "${_lib_src}"
+  "${_lib_gles2_src}"
+  "${_lib_gles2_sig_src}"
 )
 sha256sums+=(
-  "${_lib_sum}"
+  "${_lib_gles2_sum}"
+  "${_lib_gles2_sig_sum}"
 )
-
 validgpgkeys=(
-  # Truocolo <truocolo@aol.com>
+  # Truocolo
+  #   <truocolo@aol.com>
   '97E989E6CF1D2C7F7A41FF9F95684DBE23D6A3E9'
-  # Truocolo <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
+  # Truocolo
+  #   <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
   'F690CBC17BD1F53557290AF51FC17D540D0ADEED'
-  # Pellegrino Prevete (dvorak) <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
+  # Pellegrino Prevete (dvorak)
+  #   <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
   '12D8E3D7888F741E89F86EE0FEC8567A644F1D16'
 )
 
@@ -169,8 +198,22 @@ package-libretro-mupen64plus-next-sles2() {
     "${pkgdir}${_dest_dir}"
   install \
     -Dm644 \
-    "${srcdir}/${_lib}" \
+    "${srcdir}/${_lib_gles2}" \
     "${pkgdir}/${_dest_dir}/${_lib}"
 }
+
+package-libretro-mupen64plus-next-sles3() {
+  local \
+    _dest_dir
+  _dest_dir="/data/data/com.retroarch/cores"
+  install \
+    -dm755 \
+    "${pkgdir}${_dest_dir}"
+  install \
+    -Dm644 \
+    "${srcdir}/${_lib_gles2}" \
+    "${pkgdir}/${_dest_dir}/${_lib}"
+}
+
 
 # vim: ft=sh syn=sh et
