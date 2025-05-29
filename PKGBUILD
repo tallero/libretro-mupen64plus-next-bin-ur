@@ -206,8 +206,8 @@ package_libretro-mupen64plus-next-gles2-bin() {
     "${pkgdir}${_dest_dir}"
   install \
     -Dm644 \
-    "${srcdir}/${_lib_gles2}" \
-    "${pkgdir}/${_dest_dir}/${_lib_gles2}"
+    "${srcdir}/${_lib_gles2}.so" \
+    "${pkgdir}/${_dest_dir}/${_lib_gles2}.so"
 }
 
 package_libretro-mupen64plus-next-gles3-bin() {
@@ -225,8 +225,8 @@ package_libretro-mupen64plus-next-gles3-bin() {
     "${pkgdir}${_dest_dir}"
   install \
     -Dm644 \
-    "${srcdir}/${_lib_gles2}" \
-    "${pkgdir}/${_dest_dir}/${_lib_gles3}"
+    "${srcdir}/${_lib_gles3}.so" \
+    "${pkgdir}/${_dest_dir}/${_lib_gles3}.so"
 }
 
 
