@@ -105,9 +105,6 @@ checkdepends=(
 provides=(
   "${_pkgname}=${pkgver}"
 )
-conflicts=(
-  "${_pkgname}"
-)
 source=()
 sha256sums=()
 _lib_gles2="mupen64plus_next_gles2_libretro_android"
