@@ -116,9 +116,11 @@ _lib_gles3="mupen64plus_next_gles3_libretro_android.so"
 # That network may disappear sooner or later, so you'll have to crowd-publish it
 # onto mainnets download after download on the mainnets when crowd-publishing
 # will be ready.
-_evmfs_network="17000"
+# _evmfs_network="17000"
+_evmfs_network="7001"
 _evmfs_sig_network="100"
-_evmfs_address="0x151920938488F193735e83e052368cD41F9d9362"
+# _evmfs_address="0x151920938488F193735e83e052368cD41F9d9362"
+_evmfs_address="0x7D55E8B250DC2393255d62db57C4C8bF7BCf23ec"
 _evmfs_sig_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
 # The kid
 _evmfs_ns="0x926acb6aA4790ff678848A9F1C59E578B148C786"
